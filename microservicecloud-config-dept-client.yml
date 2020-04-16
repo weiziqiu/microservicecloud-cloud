@@ -1,0 +1,51 @@
+spring:
+  profiles:
+    active:
+    - dev
+---
+server:
+  port: 8001
+  
+spring:
+  profiles: dev
+  application: # 该名字将在eureka服务显示
+    name: microservicecloud-config-dept-client
+  datasource:
+    type: com.alibaba.druid.pool.DruidDataSource     # 当前数据源操作类型
+    driver-class-name: org.gjt.mm.mysql.Driver       # mysql驱动包
+    url: jdbc:mysql://localhost:3306/clouddb01?useUnicode=true&characterEncoding=utf8&useSSL=false&serverTimezone=UTC       # 数据库名称
+    username: root
+    password: 123
+    dbcp2:
+      min-idle: 5                                    # 数据库连接池的最小维持连接数
+      initial-size: 5                                # 初始化连接数
+      max-total: 5                                   # 最大连接数
+      max-wait-millis: 200                           # 等待连接获取的最大超时时间
+      
+mybatis:
+  config-location: classpath:mybatis/mybatis.cfg.xml # mybatis配置文件所在路径
+  type-aliases-package: com.wzq.springcloud.entities # 所有Entity别名类所在包
+  mapper-locations:
+    - classpath:mybatis/mapper/**/*.xml              # mapper映射文件
+    
+logging:
+  level:
+    root: INFO
+    com: # 将SQL执行语句在控制台显示
+      wzq:
+        springcloud:
+          dao: DEBUG
+          
+eureka:
+  client: # 将客户端注册进eureka服务列表内
+    service-url:
+      defaultZone: http://eureka7001.com:7001/eureka # 单机版
+  instance:
+    instance-id: dept-8001.com # 自定义服务名称信息
+    prefer-ip-address: true # 访问路径可以显示IP地址
+    
+info:
+  app.name: wzq-microservicecloud
+  company.name: www.wzq.com
+  build.artifactId: ${project.artifactId}
+  build.version: ${project.version}
